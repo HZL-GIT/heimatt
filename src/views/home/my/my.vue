@@ -1,5 +1,7 @@
 <template>
-  <div class="home">这里是home首页</div>
+  <div class="my">
+    <h1>这里是我的页面</h1>
+  </div>
 </template>
 
 <script>

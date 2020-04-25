@@ -3,7 +3,9 @@ import VueRouter from 'vue-router'
 
 import vantdemo from '@/views/vantdemo.vue'
 import Login from '@/views/login/login.vue'
-import Home from '@/views/home/home/home.vue'
+import Layout from '../views/home/layout.vue'
+import Index from '@/views/home/index/index.vue'
+import My from '@/views/home/my/my.vue'
 
 Vue.use(VueRouter)
 
@@ -15,8 +17,8 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/home', // 路由重定向
-    component: Home
+    redirect: '/index', // 路由重定向
+    component: Index
   },
   {
     // 登录页面
@@ -26,7 +28,17 @@ const routes = [
   {
     // 主页
     path: '/home',
-    component: Home
+    component: Layout,
+    children: [
+      {
+        path: '/index',
+        component: Index
+      },
+      {
+        path: '/my',
+        component: My
+      }
+    ]
   }
 ]
 

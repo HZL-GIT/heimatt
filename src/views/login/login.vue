@@ -65,7 +65,7 @@ export default {
         // window.localStorage.setItem('userInfo',JSON.stringify(result))
         localSet('userInfo', result)// 封装好方法之后的写法
         // 跳转 home 首页
-        this.$router.push('/home')
+        this.$router.push('/index')
       } catch (error) {
         // 使用vant中的toast组件进行错误提示
         // 用法与element的$message基本一致
