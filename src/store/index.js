@@ -10,7 +10,7 @@ Vue.use(Vuex)
 // 用来修改 state 中数据的对象： mutations
 export default new Vuex.Store({
   state: {
-    // 定义一个变量用来保存登录后的信息
+    // 定义一个变量用来保存用户登录后的信息
     // 判断 localstorage 中是否存在数据，如果有直接取出，如果没有放一个空对象
     userInfo: localGet('userInfo') || {}
   },

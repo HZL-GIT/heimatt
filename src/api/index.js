@@ -8,4 +8,15 @@ function getChannelsList () {
   })
 }
 
-export { getChannelsList }
+function getArticleList (channelId) {
+  return instance({
+    url: 'app/v1_1/articles',
+    method: 'get',
+    params: {
+      channel_id: channelId,
+      timestamp: Date.now(),
+      with_top: 0
+    }
+  })
+}
+export { getChannelsList, getArticleList }
