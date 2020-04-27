@@ -12,13 +12,34 @@
             :finished="item.finished"
             finished-text="没有更多了"
             @load="onLoad"
+            border
           >
-            <van-cell
-              style="height:100px"
-              v-for="(cellItem,index) in item.articleList"
-              :key="index"
-              :title="cellItem.title"
-            />
+            <van-cell v-for="(subItem,subIndex) in item.articleList" :key="subIndex">
+              <template #title>
+                <!-- 文章标题 -->
+                <h3>{{subItem.title}}</h3>
+                <!-- 文章图片 -->
+                <van-grid v-if="subItem.cover.type !== 0" :border="false" :column-num="3">
+                  <van-grid-item
+                    v-for="(imgItem, imgIndex) in subItem.cover.images"
+                    :key="imgIndex"
+                  >
+                    <van-image lazy-load :src="imgItem" />
+                  </van-grid-item>
+                </van-grid>
+                <div class="box">
+                  <div class="left">
+                    <span>{{subItem.aut_name}}</span>
+                    <span>{{subItem.comm_count}}评论</span>
+                    <span>{{subItem.pubdate}}</span>
+                  </div>
+                  <div class="right">
+                    <van-icon name="cross" />
+                  </div>
+                </div>
+              </template>
+            </van-cell>
+            <!-- <van-cell style="height:100px" :key="index" :title="cellItem.title" /> -->
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -27,14 +48,31 @@
       <van-icon name="wap-nav" @click="popShow" />
     </div>
     <!-- popUp 组件 -->
-    <channel ref="channel" :channelsListSon="channelsList"></channel>
+    <!-- <channel ref="channel" :active="active" @changeActive="v=>active=v" :channelsListSon="channelsList" ></channel>-->
+    <!-- 改写为下一句代码，同样channel中的 $emit 也要改 -->
+    <!-- <channel
+      ref="channel"
+      :active="active"
+      @update:active="v=>active=v"
+      :channelsListSon="channelsList"
+    ></channel>-->
+    <!-- 改写后又可以简写为下一句,利用 .sync 简写 -->
+    <channel ref="channel" :active.sync="active" :channelsListSon="channelsList"></channel>
   </div>
 </template>
 
 <script>
+// 导入获得频道的方法，操作文章的方法
 import { getChannelsList, getArticleList } from '@/api/index.js'
+// 导入操作localStorage的方法
 import { localGet } from '@/utils/token.js'
+// 导入频道操作面板
 import channel from './channel.vue'
+// 向 vue 注册图片懒加载指令
+import Vue from 'vue'
+import { Lazyload } from 'vant'
+Vue.use(Lazyload)
+
 export default {
   components: {
     channel
@@ -143,7 +181,7 @@ export default {
         this.channelsList = res.data.data.channels
       } else { // 用户没有登录
         // 注意：用户 没有登录 也应该可以对频道数据进行操作，而操作后要将频道数据保存在本地的 localStorage 中
-        // 查看 localStorage 中是否有保存频道数据
+        // 查看 localStorage 中是否有保存频道数据的 channel 值
         var localChannel = localGet('channel')
         if (localChannel) { // 有保存，则根据 localStorage 中保存的频道数据来渲染
           this.channelsList = localChannel
@@ -212,6 +250,24 @@ export default {
     font-size: 18px;
     color: #fff;
     background-color: #3195f9;
+  }
+  .box {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    .left {
+      span {
+        color: #999;
+        padding: 10px;
+      }
+    }
+    .right {
+      border: 1px solid #999;
+      height: 14px;
+      line-height: 14px;
+      padding: 0 5px;
+      color: #999;
+    }
   }
 }
 </style>
