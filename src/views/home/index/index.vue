@@ -31,10 +31,10 @@
                   <div class="left">
                     <span>{{subItem.aut_name}}</span>
                     <span>{{subItem.comm_count}}评论</span>
-                    <span>{{subItem.pubdate}}</span>
+                    <span>{{subItem.pubdate | timeFilter}}</span>
                   </div>
                   <div class="right">
-                    <van-icon name="cross" />
+                    <van-icon @click="openMore(subItem)" name="cross" />
                   </div>
                 </div>
               </template>
@@ -47,7 +47,7 @@
     <div class="channelBtn">
       <van-icon name="wap-nav" @click="popShow" />
     </div>
-    <!-- popUp 组件 -->
+    <!-- 导入频道操作面板  popUp 组件 -->
     <!-- <channel ref="channel" :active="active" @changeActive="v=>active=v" :channelsListSon="channelsList" ></channel>-->
     <!-- 改写为下一句代码，同样channel中的 $emit 也要改 -->
     <!-- <channel
@@ -58,6 +58,9 @@
     ></channel>-->
     <!-- 改写后又可以简写为下一句,利用 .sync 简写 -->
     <channel ref="channel" :active.sync="active" :channelsListSon="channelsList"></channel>
+
+    <!-- 更多操作 -->
+    <more ref="more" :autId="autId" :artId="artId" @delArt="del"></more>
   </div>
 </template>
 
@@ -68,6 +71,8 @@ import { getChannelsList, getArticleList } from '@/api/index.js'
 import { localGet } from '@/utils/token.js'
 // 导入频道操作面板
 import channel from './channel.vue'
+// 导入更多操作面板
+import more from './more.vue'
 // 向 vue 注册图片懒加载指令
 import Vue from 'vue'
 import { Lazyload } from 'vant'
@@ -75,29 +80,55 @@ Vue.use(Lazyload)
 
 export default {
   components: {
-    channel
+    channel,
+    more
   },
   data () {
     return {
       // 默认选中的tab
       active: 0,
-      // list 组件的加载状态
-      loading: false,
-      // list 组件中的数据源是否加载完毕
-      finished: false,
-      // 文章的数据源
-      list: [],
-      // 下拉刷新的状态
-      isLoading: false,
+      // // list 组件的加载状态
+      // loading: false,
+      // // list 组件中的数据源是否加载完毕
+      // finished: false,
+      // // 文章的数据源
+      // list: [],
+      // // 下拉刷新的状态
+      // isLoading: false,
       // 用户频道数据
-      channelsList: []
+      channelsList: [],
+      // 文章 id
+      artId: 0,
+      // 作者 id
+      autId: 0
     }
   },
   mounted () {
     this.getChannelsData()
   },
   methods: {
-    // 点击 打开 pupup
+    // 点击打开更多操作
+    openMore (subItem) {
+      // 打开更多面板
+      this.$refs.more.show = true
+      // 获取当前该文章 id
+      this.artId = subItem.art_id
+      // 获取当前文章作者 id
+      this.autId = subItem.aut_id
+    },
+    // 更多操作，不感兴趣的文章处理
+    del (artid) {
+      // 获取当前频道下所有的文章列表
+      var artList = this.channelsList[this.active].articleList
+      artList.map((item, index) => {
+        // 如果文章id与子组件进行了不喜欢的操作的文章id一致
+        if (item.art_id === artid) {
+          // 将当前所有文章列表下的该文章删除
+          artList.splice(index, 1)
+        }
+      })
+    },
+    // 点击 打开 频道操作 pupup
     popShow () {
       this.$refs.channel.show = true
     },

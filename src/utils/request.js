@@ -1,8 +1,24 @@
 import axios from 'axios'
 import store from '../store/index.js'
+
+// 导入 jsonbig （要先下载）用于解决数字过大而导致的精度丢失的问题
+import jsonbig from 'json-bigint'
+
 // 自定义实例默认值
 var instance = axios.create({
-  baseURL: 'http://ttapi.research.itcast.cn'
+  baseURL: 'http://ttapi.research.itcast.cn',
+
+  // `transformResponse` 在传递给 then/catch 前，允许修改响应数据
+  transformResponse: [function (data) {
+    // data 就是服务器返回给 axios 的 json 格式的字符串
+    // return JSON.parse(data)
+    try {
+      return jsonbig.parse(data)
+    } catch (error) {
+      // 对 data 进行任意转换处理
+      return data
+    }
+  }]
 })
 
 // 添加请求拦截器
