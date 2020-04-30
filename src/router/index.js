@@ -7,7 +7,7 @@ import Layout from '../views/home/layout.vue'
 import Index from '@/views/home/index/index.vue'
 import My from '@/views/home/my/my.vue'
 import Search from '@/views/home/search/search.vue'
-import SearchResult from '@/views/home/search/searchReslut.vue'
+import SearchResult from '@/views/home/search/searchResult.vue'
 
 Vue.use(VueRouter)
 
