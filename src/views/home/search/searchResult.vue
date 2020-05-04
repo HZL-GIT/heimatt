@@ -5,7 +5,7 @@
     <!-- 内容列表 -->
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
       <div v-for="(item, index) in resultList" :key="index">
-        <van-cell class="martop">
+        <van-cell class="martop" @click="toDetail(item)">
           <template #title>
             <!-- 文章标题 -->
             <h3>{{item.title}}</h3>
@@ -23,8 +23,8 @@
           </template>
         </van-cell>
         <van-grid class="gridCol" :column-num="3">
-          <van-grid-item icon="comment-o" text="110" />
-          <van-grid-item icon="like-o" text="点赞" />
+          <van-grid-item @click="comment" icon="comment-o" text="评论" />
+          <van-grid-item @click="zan" icon="like-o" text="点赞" />
           <van-grid-item icon="smile-o" text="分享" />
         </van-grid>
       </div>
@@ -41,13 +41,14 @@ export default {
       loading: false,
       // list 组件数据是否加载完毕
       finished: false,
-      page: 1, // 页码
+      page: 0, // 页码
       perpage: 10, // 页容量
       key: '', // 搜索的关键字
       resultList: [] // 搜索结果列表
     }
   },
   methods: {
+    // 点击回退按钮
     onClickLeft () {
       // router提供的 back 方法，回退到上一个页面
       this.$router.back()
@@ -57,15 +58,46 @@ export default {
       console.log('onLoad')
       console.log(this.key)
       try {
+        // 由于接口是有分页的，所以为了避免接口反复请求得到的都是固定的页码内容，要加加
+        this.page++
         var res = await getResult({
           page: this.page,
           perpage: this.perpage,
           value: this.key
         })
-        this.resultList = res.data.data.results
+        console.log(res)
+        // 新老数据应该 拼接 ，而不是新数据覆盖旧数据
+        this.resultList = [...this.resultList, ...res.data.data.results]
+        // 进入onLoad之后，loading会自动改为true，要想实现上拉刷新则需要将其改为false
+        this.loading = false
+        // 根据接口返回的数据长度，判断其是否已经到达最后的数据，如果是则将其结束状态改为true
+        if (res.data.data.results.length === 0) {
+          this.finished = true
+        }
       } catch (error) {
         console.log('请求错误')
       }
+    },
+    // 评论判断 用户是否登录:直接判断
+    comment () {
+      var token = this.$store.state.userInfo.token
+      if (!token) {
+        this.$toast.fail('用户未登录')
+        this.$router.push('/checklogin')
+        return
+      }
+      console.log('已评论')
+    },
+    // 点赞判断用户登录：使用自己封装好的插件判断
+    zan () {
+      if (!this.$login()) {
+        return
+      }
+      console.log('点赞')
+    },
+    // 跳转文章详情页
+    toDetail (item) {
+      this.$router.push('/detail?artid=' + item.art_id)
     }
   },
   mounted () {

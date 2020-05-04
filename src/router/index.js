@@ -8,6 +8,7 @@ import Index from '@/views/home/index/index.vue'
 import My from '@/views/home/my/my.vue'
 import Search from '@/views/home/search/search.vue'
 import SearchResult from '@/views/home/search/searchResult.vue'
+import Detail from '@/views/home/detail/detail.vue'
 
 Vue.use(VueRouter)
 
@@ -25,6 +26,11 @@ const routes = [
   {
     // 登录页面
     path: '/login',
+    component: Login
+  },
+  {
+    // 登录验证页面
+    path: '/checklogin',
     component: Login
   },
   {
@@ -46,9 +52,15 @@ const routes = [
       }
     ]
   },
+  // 搜索结果页面
   {
     path: '/searchresult',
     component: SearchResult
+  },
+  // 文章详情
+  {
+    path: '/detail',
+    component: Detail
   }
 ]
 

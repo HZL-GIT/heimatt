@@ -57,15 +57,23 @@ export default {
         })
         window.console.log(res.data.data)
         // 接收返回的数据
-        var result = res.data.data
+        var result = res.data.data // {token, refresh_token}
         // 将数据保存到 vuex 中
         // commit 专门用于调用 vuex中store里的 mutaions 中的方法的
         this.$store.commit('setUserInfo', result)
         // 将 token 保存到 本地的 localStorage 中
         // window.localStorage.setItem('userInfo',JSON.stringify(result))
         localSet('userInfo', result)// 封装好方法之后的写法
-        // 跳转 home 首页
-        this.$router.push('/index')
+        // 得到当前路由的路径
+        var path = this.$route.path
+        console.log(path)
+        if (path === '/checklogin') {
+          // 回退到上一个页面
+          this.$router.back()
+        } else {
+          // 跳转 home 首页
+          this.$router.push('/index')
+        }
       } catch (error) {
         // 使用vant中的toast组件进行错误提示
         // 用法与element的$message基本一致
