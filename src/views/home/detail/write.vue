@@ -1,20 +1,22 @@
 <template>
   <div class="write">
     <van-search
+      left-icon="edit"
       background="#0094ff"
       v-model="value"
       show-action
-      placeholder="请输入搜索关键词"
+      placeholder="请输入评论"
       @search="onSearch"
     >
       <template #action>
-        <div class="btn">发送</div>
+        <div class="btn" @click="onSearch">发送</div>
       </template>
     </van-search>
   </div>
 </template>
 
 <script>
+import { sendComment } from '@/api/detail.js'
 export default {
   data () {
     return {
@@ -22,8 +24,19 @@ export default {
     }
   },
   methods: {
-    onSearch () {
-      console.log('onSearch')
+    async onSearch () {
+      // console.log(this.value)
+      var res = await sendComment({
+        artid: this.$route.query.artid,
+        content: this.value
+      })
+      // console.log(res)
+      var newObj = res.data.data.new_obj
+      // console.log(newObj)
+      // 将该子组件获取到的新的评论数据，传到父组件进行渲染
+      this.$emit('passcomment', newObj)
+      // 清空输入框
+      this.value = ''
     }
   }
 }

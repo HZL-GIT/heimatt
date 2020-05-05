@@ -3,28 +3,51 @@
   <div class="comment">
     <div class="author">
       <div class="img">
-        <img src="http://img3.imgtn.bdimg.com/it/u=2402087187,1044842928&fm=26&gp=0.jpg" alt />
+        <img :src="item.aut_photo" alt />
       </div>
       <div class="msg">
-        <div class="name">hanahn</div>
-        <div class="comm_text">评论内容</div>
+        <div class="name">{{item.aut_name}}</div>
+        <div class="comm_text">{{item.content}}</div>
         <div>
-          <span>一年前</span>
+          <span>{{item.pubdate | timeFilter}}</span>
           <span>
-            <van-button color="#ccc" size="mini" round type="info">回复 0 </van-button>
+            <van-button
+              @click="replayOpen"
+              color="#ccc"
+              size="mini"
+              round
+              type="info"
+              v-if="isReplay===false"
+            >回复 {{item.reply_count}}</van-button>
           </span>
         </div>
       </div>
       <div class="btn">
-        <van-icon name="like" color="red" />0
+        <van-icon name="like" color="red" />
+        {{item.like_count}}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+// 导入 bus
+import bus from '@/utils/bus.js'
 export default {
-
+  // 接口传入的评论数据
+  props: ['item', 'isReplay'],
+  methods: {
+    // 打开回复面板
+    replayOpen () {
+      // 打开回复面板
+      this.$emit('openReplay', true)
+      // 将数据传入 bus 中
+      bus.$emit('passitem', this.item)
+    }
+  }
+  // mounted () {
+  //   console.log(this.item)
+  // }
 }
 </script>
 
@@ -36,9 +59,9 @@ export default {
   .name {
     color: #0094ff;
   }
-  .time {
-    span {
-      margin:0 10px;
+  .msg {
+    span:nth-child(2) {
+      margin: 0 10px;
     }
   }
 }
