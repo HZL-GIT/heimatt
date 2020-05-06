@@ -9,6 +9,7 @@ import My from '@/views/home/my/my.vue'
 import Search from '@/views/home/search/search.vue'
 import SearchResult from '@/views/home/search/searchResult.vue'
 import Detail from '@/views/home/detail/detail.vue'
+import PersonInfo from '@/views/home/my/personInfo'
 
 Vue.use(VueRouter)
 
@@ -61,6 +62,11 @@ const routes = [
   {
     path: '/detail',
     component: Detail
+  },
+  // 个人信息详情编辑页
+  {
+    path: '/personInfo',
+    component: PersonInfo
   }
 ]
 

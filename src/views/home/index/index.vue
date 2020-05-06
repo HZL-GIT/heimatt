@@ -14,7 +14,7 @@
             @load="onLoad"
             border
           >
-            <van-cell v-for="(subItem,subIndex) in item.articleList" :key="subIndex">
+            <van-cell @click="$router.push('/detail?artid='+subItem.art_id)" v-for="(subItem,subIndex) in item.articleList" :key="subIndex">
               <template #title>
                 <!-- 文章标题 -->
                 <h3>{{subItem.title}}</h3>

@@ -42,7 +42,7 @@
       </div>
     </van-list>
     <!-- 发表评论 -->
-    <write @passcomment="passcomment"></write>
+    <write :isReplay="false" @passcomment="passcomment"></write>
     <!-- 回复组件 -->
     <replay ref="replay"></replay>
   </div>

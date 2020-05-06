@@ -67,4 +67,17 @@ function getReplayList ({ commid, offset, limit }) {
   })
 }
 
-export { getDetail, followedAut, unFollowedAut, getCommentList, sendComment, getReplayList }
+// 添加评论回复
+function addCommentReplay ({ commtid, content, artid }) {
+  return instance({
+    url: '/app/v1_0/comments',
+    method: 'POST',
+    data: {
+      target: commtid,
+      content: content,
+      art_id: artid
+    }
+  })
+}
+
+export { getDetail, followedAut, unFollowedAut, getCommentList, sendComment, getReplayList, addCommentReplay }

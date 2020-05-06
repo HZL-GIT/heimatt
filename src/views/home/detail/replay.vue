@@ -7,8 +7,8 @@
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <comment :isReplay="true" v-for="(item, index) in replayList" :key="index" :item="item"></comment>
       </van-list>
-      // 评论书写组件
-      <write></write>
+      <!-- 评论书写组件 -->
+      <write :isReplay="true" @passReplay="passReplay" :commtid="currentItem.com_id"></write>
     </van-popup>
   </div>
 </template>
@@ -65,12 +65,25 @@ export default {
       if (this.offset === this.endid) {
         this.finished = true
       }
+    },
+    // 接收新添加的评论
+    passReplay (obj) {
+      // 将新的评论回复添加进去
+      this.replayList.unshift(obj)
+      // 将回复按钮中的回复数量进行 加一 操作
+      this.currentItem.reply_count++
     }
   },
   mounted () {
     // 接收 bus 中的参数
     bus.$on('passitem', item => {
       this.currentItem = item
+      // 点击回复清空原先的回复内容
+      this.loading = false
+      this.finished = false
+      this.offset = null
+      this.replayList = []
+      this.endid = null
     })
   }
 }
