@@ -35,7 +35,7 @@
       <van-cell-group class="group">
         <van-cell title="消息通知" is-link />
         <van-cell title="用户反馈" is-link />
-        <van-cell title="小智同学" is-link />
+        <van-cell @click="$router.push('/robot')" title="小智同学" is-link />
       </van-cell-group>
     </div>
   </div>

@@ -10,6 +10,7 @@ import Search from '@/views/home/search/search.vue'
 import SearchResult from '@/views/home/search/searchResult.vue'
 import Detail from '@/views/home/detail/detail.vue'
 import PersonInfo from '@/views/home/my/personInfo'
+import Robot from '@/views/home/my/robot.vue'
 
 Vue.use(VueRouter)
 
@@ -67,6 +68,11 @@ const routes = [
   {
     path: '/personInfo',
     component: PersonInfo
+  },
+  // 小智机器人
+  {
+    path: '/robot',
+    component: Robot
   }
 ]
 

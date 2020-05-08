@@ -14,7 +14,7 @@
             @load="onLoad"
             border
           >
-            <van-cell @click="$router.push('/detail?artid='+subItem.art_id)" v-for="(subItem,subIndex) in item.articleList" :key="subIndex">
+            <van-cell @click.prevent="$router.push('/detail?artid='+subItem.art_id)" v-for="(subItem,subIndex) in item.articleList" :key="subIndex">
               <template #title>
                 <!-- 文章标题 -->
                 <h3>{{subItem.title}}</h3>
@@ -34,7 +34,7 @@
                     <span>{{subItem.pubdate | timeFilter}}</span>
                   </div>
                   <div class="right">
-                    <van-icon @click="openMore(subItem)" name="cross" />
+                    <van-icon @click.stop="openMore(subItem)" name="cross" />
                   </div>
                 </div>
               </template>
