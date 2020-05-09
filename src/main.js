@@ -8,6 +8,8 @@ import '@/assets/style/index.css'// 导入iconfont
 import './filter/myfilter.js'// 导入全局过滤器
 import myplugin from './utils/myplugin.js' // 导入自己封装的登录判断插件
 
+import 'amfe-flexible/index.js' // 解决 Vue 移动端适配插件的导入
+
 Vue.use(Vant)// 注册vant
 Vue.use(Toast)// 注册Toast
 Vue.use(myplugin)// 使用自己封装好的登录判断插件

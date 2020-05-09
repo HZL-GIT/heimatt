@@ -95,6 +95,7 @@ export default {
     justify-content: space-around;
     text-align: center;
     .item {
+      font-size: 16px;
       div:nth-child(1) {
         margin-bottom: 8px;
       }

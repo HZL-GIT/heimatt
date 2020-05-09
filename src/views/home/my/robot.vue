@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <van-nav-bar left-arrow @click-left="$router.back()" title="阿甘冰室" :fixed="true" />
     <!-- 内容框 -->
-    <div class="main">
+    <div class="main" ref="main">
       <div
         class="content"
         :class="{user:item.isRobot===false}"
@@ -65,6 +65,11 @@ export default {
       })
       // 3.2清空输入框内容
       this.value = ''
+      // 实现添加新内容后自动滚动到新内容处
+      // 内容区域添加 overflow: auto; 即可出现滚动条
+      this.$nextTick(() => {
+        this.$refs.main.scrollTop = this.$refs.main.scrollHeight
+      })
     }
   },
   // 在 mounted 中连接服务器
@@ -78,6 +83,9 @@ export default {
       this.contentArr.push({
         told: data.msg,
         isRobot: true
+      })
+      this.$nextTick(() => {
+        this.$refs.main.scrollTop = this.$refs.main.scrollHeight
       })
     })
   }
@@ -110,6 +118,7 @@ export default {
     position: fixed;
     top: 46px;
     bottom: 54px;
+    overflow: auto;
     .content {
       overflow: hidden;
       margin-top: 10px;
@@ -122,10 +131,12 @@ export default {
       }
       .speak {
         float: left;
+        font-size: 16px;
         background-color: #ccc;
         padding: 10px;
         border-radius: 5px;
         margin-top: 5px;
+        max-width: 60%;
       }
     }
     .user {
